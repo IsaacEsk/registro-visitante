@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Visitante</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #15202b;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1da1f2;
+        }
+
+        .input-container {
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #1da1f2;
+            background-color: #192734;
+            color: white;
+            font-size: 16px;
+        }
+
+        #camera-container, #photo {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #camera-container video, #photo img {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #38444d;
+        }
+
+        button {
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            width: 80%;
+        }
+
+        button:hover {
+            background-color: #1a91da;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registro Visitante</h1>
+
+    <div class="input-container">
+        <input type="text" id="nombre" placeholder="Escribe tu nombre">
+    </div>
+
+    <div id="camera-container">
+        <video id="camera" autoplay></video>
+    </div>
+
+    <button onclick="takePhoto()">Tomar Foto</button>
+
+    <div id="photo">
+        <img id="photo-preview" alt="Tu foto aparecerá aquí">
+    </div>
+
+    <button onclick="submitForm()">Enviar Registro</button>
+
+    <script>
+        const camera = document.getElementById('camera');
+        const photoPreview = document.getElementById('photo-preview');
+        const nombreInput = document.getElementById('nombre');
+
+        // Acceder a la cámara del móvil
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+                camera.srcObject = stream;
+            });
+        }
+
+        function takePhoto() {
+            const canvas = document.createElement('canvas');
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+            canvas.getContext('2d').drawImage(camera, 0, 0);
+            photoPreview.src = canvas.toDataURL('image/png');
+        }
+
+        function submitForm() {
+            const nombre = nombreInput.value;
+            if (nombre.trim() === "") {
+                alert("Por favor, ingrese su nombre");
+                return;
+            }
+            if (photoPreview.src) {
+                alert("Registro enviado\nNombre: " + nombre);
+                // Aquí puedes agregar el código para enviar el formulario o la imagen
+            } else {
+                alert("Por favor, tome una foto primero");
+            }
+        }
+    </script>
+
+</body>
+</html>
