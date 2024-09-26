@@ -32,7 +32,7 @@
             text-align: center;
         }
 
-        .input-container input {
+        .input-container input, .input-container select {
             width: 100%;
             padding: 10px;
             border-radius: 8px;
@@ -40,6 +40,7 @@
             background-color: #192734;
             color: white;
             font-size: 16px;
+            margin-bottom: 15px;
         }
 
         #photo {
@@ -85,6 +86,18 @@
         <input type="text" id="nombre" placeholder="Escribe tu nombre">
     </div>
 
+    <!-- Menú desplegable para seleccionar el domicilio -->
+    <div class="input-container">
+        <select id="domicilio">
+            <option value="" disabled selected>Selecciona un domicilio</option>
+            <option value="Casa 1">Casa 1</option>
+            <option value="Casa 2">Casa 2</option>
+            <option value="Casa 3">Casa 3</option>
+            <option value="Casa 4">Casa 4</option>
+            <option value="Casa 5">Casa 5</option>
+        </select>
+    </div>
+
     <button onclick="document.getElementById('cameraInput').click()">Tomar Foto</button>
 
     <!-- Input oculto para capturar la foto -->
@@ -99,6 +112,7 @@
     <script>
         const photoPreview = document.getElementById('photo-preview');
         const nombreInput = document.getElementById('nombre');
+        const domicilioInput = document.getElementById('domicilio');
 
         // Función para mostrar la foto capturada
         function displayPhoto(input) {
@@ -114,12 +128,17 @@
         // Función para enviar el registro
         function submitForm() {
             const nombre = nombreInput.value;
+            const domicilio = domicilioInput.value;
             if (nombre.trim() === "") {
                 alert("Por favor, ingrese su nombre");
                 return;
             }
+            if (!domicilio) {
+                alert("Por favor, seleccione un domicilio");
+                return;
+            }
             if (photoPreview.src) {
-                alert("Registro enviado\nNombre: " + nombre);
+                alert("Registro enviado\nNombre: " + nombre + "\nDomicilio: " + domicilio);
                 // Aquí puedes agregar el código para enviar el formulario o la imagen
             } else {
                 alert("Por favor, tome una foto primero");
@@ -129,3 +148,4 @@
 
 </body>
 </html>
+
