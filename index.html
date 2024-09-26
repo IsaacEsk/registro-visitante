@@ -42,7 +42,7 @@
             font-size: 16px;
         }
 
-        #camera-container, #photo {
+        #photo {
             width: 100%;
             max-width: 320px;
             height: auto;
@@ -50,7 +50,7 @@
             text-align: center;
         }
 
-        #camera-container video, #photo img {
+        #photo img {
             width: 100%;
             border-radius: 8px;
             border: 2px solid #38444d;
@@ -85,11 +85,10 @@
         <input type="text" id="nombre" placeholder="Escribe tu nombre">
     </div>
 
-    <div id="camera-container">
-        <video id="camera" autoplay></video>
-    </div>
+    <button onclick="document.getElementById('cameraInput').click()">Tomar Foto</button>
 
-    <button onclick="takePhoto()">Tomar Foto</button>
+    <!-- Input oculto para capturar la foto -->
+    <input type="file" id="cameraInput" accept="image/*" capture="user" onchange="displayPhoto(this)">
 
     <div id="photo">
         <img id="photo-preview" alt="Tu foto aparecerá aquí">
@@ -98,25 +97,21 @@
     <button onclick="submitForm()">Enviar Registro</button>
 
     <script>
-        const camera = document.getElementById('camera');
         const photoPreview = document.getElementById('photo-preview');
         const nombreInput = document.getElementById('nombre');
 
-        // Acceder a la cámara del móvil
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
-                camera.srcObject = stream;
-            });
+        // Función para mostrar la foto capturada
+        function displayPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    photoPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
-        function takePhoto() {
-            const canvas = document.createElement('canvas');
-            canvas.width = camera.videoWidth;
-            canvas.height = camera.videoHeight;
-            canvas.getContext('2d').drawImage(camera, 0, 0);
-            photoPreview.src = canvas.toDataURL('image/png');
-        }
-
+        // Función para enviar el registro
         function submitForm() {
             const nombre = nombreInput.value;
             if (nombre.trim() === "") {
